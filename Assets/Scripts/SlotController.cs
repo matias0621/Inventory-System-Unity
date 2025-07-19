@@ -1,16 +1,32 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class SlotController : MonoBehaviour
+public class SlotController : MonoBehaviour, IPointerClickHandler
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private Item item;
+    private GameObject slot;
+    
+    
     void Start()
     {
-        
+        slot = gameObject.transform.GetChild(0).gameObject;
+        SetDataSlot(item);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerClick(PointerEventData eventData)
     {
+        if (item != null)
+        {
+            InventoryManager.Instance.SetDraggedItem(item);
+        }
+    }
+
+    public void SetDataSlot(Item item)
+    {
+        if (item == null) return;
         
+        Image image = slot.transform.GetComponent<Image>();
+        image.sprite = item.Icon;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 public class Item : ScriptableObject
 {
     [Header("Item")] 
-    public string nameItem;
-    public Sprite icon;
-    public int count;
+    public string NameItem;
+    public Sprite Icon;
+    public int Count;
 }
