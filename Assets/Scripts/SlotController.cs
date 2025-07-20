@@ -19,14 +19,26 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
         if (item != null)
         {
             InventoryManager.Instance.SetDraggedItem(item);
+            SetDataSlot(null);
+            item = null;
+        }
+        else if (item == null && InventoryManager.Instance.GetItemDropped() != null)
+        {
+            item = InventoryManager.Instance.GetItemDropped();
+            SetDataSlot(item);
+            InventoryManager.Instance.ClearDraggedItem();
         }
     }
 
     public void SetDataSlot(Item item)
     {
-        if (item == null) return;
-        
         Image image = slot.transform.GetComponent<Image>();
+        if (item == null)
+        {
+            image.color = new Color(0, 0, 0, 0);
+            return;
+        }
+        image.color = Color.white;
         image.sprite = item.Icon;
     }
 }

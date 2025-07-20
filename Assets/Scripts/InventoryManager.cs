@@ -10,6 +10,7 @@ public class InventoryManager : MonoBehaviour
     private bool dragged = false;
     private RectTransform dragArea;
     public Canvas canvas;
+    public Item itemDropped;
     
     private void Awake()
     {
@@ -36,6 +37,8 @@ public class InventoryManager : MonoBehaviour
                 canvas.worldCamera,
                 out localPoint
             );
+            localPoint.x -= 50;
+            localPoint.y -= 50;
             dragArea.anchoredPosition = localPoint;
         }
     }
@@ -47,10 +50,33 @@ public class InventoryManager : MonoBehaviour
 
     public void SetDraggedItem(Item item)
     {
+        if (item == null)
+        {
+            draggedItem.SetActive(false);
+            dragged = false;
+            itemDropped = null;
+            return;
+        }
+
         draggedItem.SetActive(true);
         Image image = draggedItem.GetComponent<Image>();
         image.sprite = item.Icon;
         dragged = true;
         dragArea = draggedItem.GetComponent<RectTransform>();
+        itemDropped = item;
     }
+
+
+    public Item GetItemDropped()
+    {
+        return itemDropped;
+    }
+
+    public void ClearDraggedItem()
+    {
+        draggedItem.SetActive(false);
+        dragged = false;
+        itemDropped = null;
+    }
+    
 }
