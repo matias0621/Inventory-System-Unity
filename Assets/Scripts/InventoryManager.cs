@@ -37,8 +37,8 @@ public class InventoryManager : MonoBehaviour
                 canvas.worldCamera,
                 out localPoint
             );
-            localPoint.x -= 50;
-            localPoint.y -= 50;
+            //localPoint.x -= 50;
+            //localPoint.y -= 50;
             dragArea.anchoredPosition = localPoint;
         }
     }
