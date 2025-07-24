@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -5,33 +6,56 @@ using UnityEngine.UI;
 public class SlotController : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private Item item;
-    private GameObject slot;
+    public GameObject slot;
+    public TextMeshProUGUI quantityObject;
     
     
     void Start()
     {
-        slot = gameObject.transform.GetChild(0).gameObject;
         SetDataSlot(item);
+        Debug.Log(item.quantity);
+        SetQuantity(item.quantity);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (item != null && InventoryManager.Instance.GetItemDropped() != null)
+        if (item != null && InventoryManager.Instance.GetItemDropped() != null 
+                         && InventoryManager.Instance.GetItemDropped().NameItem != item.name)
         {
             Item newItem = InventoryManager.Instance.GetItemDropped();
             InventoryManager.Instance.SetDraggedItem(item);
             SetDataSlot(newItem);
+            SetQuantity(newItem.quantity);
+        }
+        else if (item != null && InventoryManager.Instance.GetItemDropped() != null && 
+                 InventoryManager.Instance.GetItemDropped().NameItem == item.name && 
+                 InventoryManager.Instance.GetItemDropped().quantity != 1)
+        {
+            item.quantity++;
+            SetQuantity(item.quantity);
+            InventoryManager.Instance.SubtractQuantity();
+        }
+        else if (item != null && InventoryManager.Instance.GetItemDropped() != null && 
+                 InventoryManager.Instance.GetItemDropped().NameItem == item.name && 
+                 InventoryManager.Instance.GetItemDropped().quantity == 1)
+        {
+            item.quantity++;
+            SetQuantity(item.quantity);
+            InventoryManager.Instance.SubtractQuantity();
+            InventoryManager.Instance.ClearDraggedItem();
         }
         else if (item == null && InventoryManager.Instance.GetItemDropped() != null)
         {
             item = InventoryManager.Instance.GetItemDropped();
             SetDataSlot(item);
+            SetQuantity(item.quantity);
             InventoryManager.Instance.ClearDraggedItem();
         }
         else if (item != null && InventoryManager.Instance.GetItemDropped() == null)
         {
             InventoryManager.Instance.SetDraggedItem(item);
             SetDataSlot(null);
+            SetQuantity(0);
             item = null;
         }
     }
@@ -48,5 +72,14 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
         this.item = item;
         image.color = Color.white;
         image.sprite = item.Icon;
+    }
+
+    public void SetQuantity(int quantity)
+    {
+        if (quantity == 0)
+        {
+            quantityObject.text = "";
+        }
+        quantityObject.text = quantity.ToString();
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,8 +38,6 @@ public class InventoryManager : MonoBehaviour
                 canvas.worldCamera,
                 out localPoint
             );
-            //localPoint.x -= 50;
-            //localPoint.y -= 50;
             dragArea.anchoredPosition = localPoint;
         }
     }
@@ -57,13 +56,14 @@ public class InventoryManager : MonoBehaviour
             itemDropped = null;
             return;
         }
-
+        
         draggedItem.SetActive(true);
         Image image = draggedItem.GetComponent<Image>();
         image.sprite = item.Icon;
         dragged = true;
         dragArea = draggedItem.GetComponent<RectTransform>();
         itemDropped = item;
+        SetQuantity(itemDropped.quantity);
     }
 
 
@@ -77,6 +77,20 @@ public class InventoryManager : MonoBehaviour
         draggedItem.SetActive(false);
         dragged = false;
         itemDropped = null;
+    }
+
+    public void SubtractQuantity()
+    {
+        if (itemDropped != null)
+        {
+            itemDropped.quantity -= 1;
+        }
+    }
+
+    public void SetQuantity(int quantity)
+    {
+        TextMeshProUGUI text = draggedItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        text.text = quantity.ToString();
     }
     
 }

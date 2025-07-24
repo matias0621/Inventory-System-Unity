@@ -6,5 +6,5 @@ public class Item : ScriptableObject
     [Header("Item")] 
     public string NameItem;
     public Sprite Icon;
-    public int Count;
+    public int quantity;
 }
