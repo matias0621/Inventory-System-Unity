@@ -7,4 +7,11 @@ public class Item : ScriptableObject
     public string NameItem;
     public Sprite Icon;
     public int quantity;
+    
+    public Item Clone()
+    {
+        Item newItem = Instantiate(this);
+        newItem.quantity = this.quantity;
+        return newItem;
+    }
 }

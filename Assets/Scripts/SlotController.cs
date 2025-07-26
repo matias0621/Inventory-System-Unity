@@ -8,78 +8,73 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Item item;
     public GameObject slot;
     public TextMeshProUGUI quantityObject;
-    
-    
+
     void Start()
     {
-        SetDataSlot(item);
-        Debug.Log(item.quantity);
-        SetQuantity(item.quantity);
+        SetDataSlot(item?.Clone());
+        SetQuantity(item?.quantity ?? 0);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (item != null && InventoryManager.Instance.GetItemDropped() != null 
-                         && InventoryManager.Instance.GetItemDropped().NameItem != item.name)
+        Item mouseItem = InventoryManager.Instance.GetItemDropped();
+
+        if (item != null && mouseItem != null && mouseItem.NameItem != item.NameItem)
         {
-            Item newItem = InventoryManager.Instance.GetItemDropped();
-            InventoryManager.Instance.SetDraggedItem(item);
-            SetDataSlot(newItem);
-            SetQuantity(newItem.quantity);
+            Debug.Log("1");
+            InventoryManager.Instance.SetDraggedItem(item.Clone());
+            SetDataSlot(mouseItem.Clone());
+            SetQuantity(mouseItem.quantity);
         }
-        else if (item != null && InventoryManager.Instance.GetItemDropped() != null && 
-                 InventoryManager.Instance.GetItemDropped().NameItem == item.name && 
-                 InventoryManager.Instance.GetItemDropped().quantity != 1)
+        else if (item != null && mouseItem != null && mouseItem.NameItem == item.NameItem && mouseItem.quantity > 1)
         {
+            Debug.Log("2");
             item.quantity++;
             SetQuantity(item.quantity);
             InventoryManager.Instance.SubtractQuantity();
         }
-        else if (item != null && InventoryManager.Instance.GetItemDropped() != null && 
-                 InventoryManager.Instance.GetItemDropped().NameItem == item.name && 
-                 InventoryManager.Instance.GetItemDropped().quantity == 1)
+        else if (item != null && mouseItem != null && mouseItem.NameItem == item.NameItem && mouseItem.quantity == 1)
         {
+            Debug.Log("3");
             item.quantity++;
             SetQuantity(item.quantity);
             InventoryManager.Instance.SubtractQuantity();
             InventoryManager.Instance.ClearDraggedItem();
         }
-        else if (item == null && InventoryManager.Instance.GetItemDropped() != null)
+        else if (item == null && mouseItem != null)
         {
-            item = InventoryManager.Instance.GetItemDropped();
-            SetDataSlot(item);
-            SetQuantity(item.quantity);
+            Debug.Log("4");
+            SetDataSlot(mouseItem.Clone());
+            SetQuantity(mouseItem.quantity);
             InventoryManager.Instance.ClearDraggedItem();
         }
-        else if (item != null && InventoryManager.Instance.GetItemDropped() == null)
+        else if (item != null && mouseItem == null)
         {
-            InventoryManager.Instance.SetDraggedItem(item);
+            Debug.Log("5");
+            InventoryManager.Instance.SetDraggedItem(item.Clone());
             SetDataSlot(null);
             SetQuantity(0);
             item = null;
         }
     }
 
-    public void SetDataSlot(Item item)
+    public void SetDataSlot(Item newItem)
     {
         Image image = slot.transform.GetComponent<Image>();
-        if (item == null)
+        item = newItem;
+
+        if (newItem == null)
         {
-            this.item = item;
             image.color = new Color(0, 0, 0, 0);
             return;
         }
-        this.item = item;
+
         image.color = Color.white;
-        image.sprite = item.Icon;
+        image.sprite = newItem.Icon;
     }
 
     public void SetQuantity(int quantity)
     {
-        if (quantity == 0)
-        {
-            quantityObject.text = "";
-        }
-        quantityObject.text = quantity.ToString();
+        quantityObject.text = quantity > 0 ? quantity.ToString() : "";
     }
 }

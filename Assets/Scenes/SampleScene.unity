@@ -2018,6 +2018,7 @@ MonoBehaviour:
   draggedItem: {fileID: 722204450}
   canvas: {fileID: 1831848230}
   itemDropped: {fileID: 0}
+  itemQuantity: {fileID: 522849765}
 --- !u!4 &672903222
 Transform:
   m_ObjectHideFlags: 0
@@ -4568,7 +4569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb2104cbd2cd424eb457dea888176c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 1fc2baf320ced864fb1b86c9fa5cb77e, type: 2}
+  item: {fileID: 11400000, guid: 3511f2c966eba0140b9468d10761c2ab, type: 2}
   slot: {fileID: 901036804}
   quantityObject: {fileID: 909981501}
 --- !u!1 &1788656614

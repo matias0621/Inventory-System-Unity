@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
     private RectTransform dragArea;
     public Canvas canvas;
     public Item itemDropped;
+    public TextMeshProUGUI itemQuantity;
     
     private void Awake()
     {
@@ -38,6 +39,8 @@ public class InventoryManager : MonoBehaviour
                 canvas.worldCamera,
                 out localPoint
             );
+            localPoint.x -= 50;
+            localPoint.y -= 50;
             dragArea.anchoredPosition = localPoint;
         }
     }
@@ -83,14 +86,15 @@ public class InventoryManager : MonoBehaviour
     {
         if (itemDropped != null)
         {
-            itemDropped.quantity -= 1;
+            itemDropped.quantity--;
+            SetQuantity(itemDropped.quantity);
+            Debug.Log(itemDropped.quantity);
         }
     }
 
     public void SetQuantity(int quantity)
     {
-        TextMeshProUGUI text = draggedItem.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        text.text = quantity.ToString();
+        itemQuantity.text = quantity.ToString();
     }
     
 }
