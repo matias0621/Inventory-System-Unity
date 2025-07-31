@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NameItem: Hacha
   Icon: {fileID: 2242318624617250911, guid: de534df2b410495459e5b203f118e26e, type: 3}
-  quantity: 30
+  quantity: 64

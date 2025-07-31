@@ -13,6 +13,7 @@ public class InventoryManager : MonoBehaviour
     public Canvas canvas;
     public Item itemDropped;
     public TextMeshProUGUI itemQuantity;
+    public GameObject[] SlotList;
     
     private void Awake()
     {
@@ -96,5 +97,18 @@ public class InventoryManager : MonoBehaviour
     {
         itemQuantity.text = quantity.ToString();
     }
-    
+
+    public void FindSlotForSaveItem(Item item)
+    {
+        foreach (GameObject slot in SlotList)
+        {
+            SlotController slotController = slot.GetComponent<SlotController>();
+            if (slotController.IsEmpty())
+            {
+                slotController.SetDataSlot(item);
+                slotController.SetQuantity(1);
+                break;
+            }
+        }
+    }
 }
