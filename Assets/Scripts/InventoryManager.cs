@@ -14,6 +14,7 @@ public class InventoryManager : MonoBehaviour
     public Item itemDropped;
     public TextMeshProUGUI itemQuantity;
     public GameObject[] SlotList;
+    public int quantityItem = 0;
     
     private void Awake()
     {
@@ -51,7 +52,7 @@ public class InventoryManager : MonoBehaviour
         draggedItem.SetActive(false);
     }
 
-    public void SetDraggedItem(Item item)
+    public void SetDraggedItem(Item item, int amount)
     {
         if (item == null)
         {
@@ -67,7 +68,8 @@ public class InventoryManager : MonoBehaviour
         dragged = true;
         dragArea = draggedItem.GetComponent<RectTransform>();
         itemDropped = item;
-        SetQuantity(itemDropped.quantity);
+        quantityItem = amount;
+        SetQuantity(quantityItem);
     }
 
 
@@ -81,15 +83,15 @@ public class InventoryManager : MonoBehaviour
         draggedItem.SetActive(false);
         dragged = false;
         itemDropped = null;
+        quantityItem = 0;
     }
 
     public void SubtractQuantity()
     {
         if (itemDropped != null)
         {
-            itemDropped.quantity--;
-            SetQuantity(itemDropped.quantity);
-            Debug.Log(itemDropped.quantity);
+            quantityItem--;
+            SetQuantity(quantityItem);
         }
     }
 
@@ -106,7 +108,7 @@ public class InventoryManager : MonoBehaviour
             if (slotController.IsEmpty())
             {
                 slotController.SetDataSlot(item);
-                slotController.SetQuantity(1);
+                slotController.IncreaseQuantity();
                 break;
             }
         }

@@ -9,6 +9,8 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Item item;
     public GameObject slot;
     public TextMeshProUGUI quantityObject;
+    [SerializeField] private int quantityItem;
+    
     
 
     void Start()
@@ -25,49 +27,49 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
    public void InteractiveInventory()
     {
         Item mouseItem = InventoryManager.Instance.GetItemDropped();
+        int quantityItemMouse = InventoryManager.Instance.quantityItem;
 
         if (item != null && mouseItem != null && mouseItem.NameItem != item.NameItem)
         {
-            Debug.Log("Primer if: Los ítems son distintos. Se intercambian. SetDraggedItem con el item actual y SetDataSlot con el del mouse.");
-            InventoryManager.Instance.SetDraggedItem(item.Clone());
+            //Debug.Log("Primer if: Los ítems son distintos. Se intercambian. SetDraggedItem con el item actual y SetDataSlot con el del mouse.");
+            InventoryManager.Instance.SetDraggedItem(item.Clone(), quantityItem);
             SetDataSlot(mouseItem.Clone());
-            SetQuantity(mouseItem.quantity);
+            SetQuantity(quantityItemMouse);
         }
         else if (item != null && mouseItem != null &&
-                 mouseItem.NameItem == item.NameItem && mouseItem.quantity > 1 && item.quantity < 64)
+                 mouseItem.NameItem == item.NameItem && quantityItemMouse > 1 && quantityItem < 64)
         {
-            Debug.Log("Segundo if: Mismo tipo de ítem, cantidad del mouse > 1 y slot no lleno. Se suma uno al slot y se resta uno del mouse.");
-            item.quantity++;
-            SetQuantity(item.quantity);
+            //Debug.Log("Segundo if: Mismo tipo de ítem, cantidad del mouse > 1 y slot no lleno. Se suma uno al slot y se resta uno del mouse.");
+            IncreaseQuantity();
+            SetQuantity(quantityItem);
             InventoryManager.Instance.SubtractQuantity();
         }
         else if (item != null && mouseItem != null &&
-                 mouseItem.NameItem == item.NameItem && mouseItem.quantity == 1)
+                 mouseItem.NameItem == item.NameItem && quantityItemMouse == 1)
         {
-            Debug.Log("Tercer if: Mismo tipo de ítem y el del mouse tiene solo 1. Se suma al slot y se limpia el item del mouse.");
-            item.quantity++;
-            SetQuantity(item.quantity);
+            //Debug.Log("Tercer if: Mismo tipo de ítem y el del mouse tiene solo 1. Se suma al slot y se limpia el item del mouse.");
+            IncreaseQuantity();
             InventoryManager.Instance.SubtractQuantity();
             InventoryManager.Instance.ClearDraggedItem();
         }
-        else if (item != null && mouseItem != null && item.quantity >= 64)
+        else if (item != null && mouseItem != null && quantityItem >= 64)
         {
-            Debug.Log("Cuarto if: El slot ya está lleno. Se intercambian los ítems.");
-            InventoryManager.Instance.SetDraggedItem(item.Clone());
+            //Debug.Log("Cuarto if: El slot ya está lleno. Se intercambian los ítems.");
+            InventoryManager.Instance.SetDraggedItem(item.Clone(), quantityItem);
             SetDataSlot(mouseItem.Clone());
-            SetQuantity(mouseItem.quantity);
+            SetQuantity(quantityItemMouse);
         }
         else if (item == null && mouseItem != null)
         {
-            Debug.Log("Quinto if: El slot está vacío y hay un ítem en el mouse. Se coloca el ítem en el slot y se limpia el del mouse.");
+            //Debug.Log("Quinto if: El slot está vacío y hay un ítem en el mouse. Se coloca el ítem en el slot y se limpia el del mouse.");
             SetDataSlot(mouseItem.Clone());
-            SetQuantity(mouseItem.quantity);
+            SetQuantity(quantityItemMouse);
             InventoryManager.Instance.ClearDraggedItem();
         }
         else if (item != null && mouseItem == null)
         {
-            Debug.Log("Sexto if: Hay un ítem en el slot y el mouse está vacío. Se levanta el ítem del slot al mouse y se limpia el slot.");
-            InventoryManager.Instance.SetDraggedItem(item.Clone());
+            //Debug.Log("Sexto if: Hay un ítem en el slot y el mouse está vacío. Se levanta el ítem del slot al mouse y se limpia el slot.");
+            InventoryManager.Instance.SetDraggedItem(item.Clone(), quantityItem);
             SetDataSlot(null);
             SetQuantity(0);
             item = null;
@@ -78,23 +80,30 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
     public void SplitItem()
     {
         Item mouseItem = InventoryManager.Instance.GetItemDropped();
+        int quantityItemMouse = InventoryManager.Instance.quantityItem;
 
-        if (mouseItem == null && item != null)
+        if (mouseItem == null && item != null && quantityItem > 1)
         {
-            item.quantity = item.quantity/2;
-            SetQuantity(item.quantity);
-            InventoryManager.Instance.SetDraggedItem(item.Clone());
+            Debug.Log("---------------------------Antes de la divicion----------------------");
+            Debug.Log(quantityItem);
+            Debug.Log("---------------------------Antes de la divicion----------------------");
+            quantityItem /= 2;
+            Debug.Log("---------------------------Despues de la divicion----------------------");
+            Debug.Log(quantityItem);
+            Debug.Log("---------------------------Despues de la divicion----------------------");
+            SetQuantity(quantityItem);
+            InventoryManager.Instance.SetDraggedItem(item.Clone(), quantityItem);
         }
 
         if (mouseItem != null && mouseItem.NameItem == item.NameItem)
         {
-            item.quantity = item.quantity + mouseItem.quantity;
-            if (item.quantity > 64)
+            quantityItem += quantityItemMouse;
+            if (quantityItem > 64)
             {
-                item.quantity = item.quantity - mouseItem.quantity;
+                quantityItem -= quantityItemMouse;
                 return;
             }
-            SetQuantity(item.quantity);
+            SetQuantity(quantityItem);
             InventoryManager.Instance.ClearDraggedItem();
         }
     }
@@ -121,7 +130,12 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
     public void SetQuantity(int quantity)
     {
         quantityObject.text = quantity > 0 ? quantity.ToString() : "";
-        Debug.Log(item.quantity);
+    }
+
+    public void IncreaseQuantity()
+    {
+        quantityItem++;
+        quantityObject.text = quantityItem.ToString(); 
     }
 
     public Boolean IsEmpty()
