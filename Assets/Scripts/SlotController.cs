@@ -88,7 +88,7 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
             int amountToKeep = quantityItem - amountToGive;
             SetQuantity(amountToKeep);
             quantityItem = amountToKeep;
-            InventoryManager.Instance.SetDraggedItem(item.Clone(), quantityItem);
+            InventoryManager.Instance.SetDraggedItem(item.Clone(), amountToGive);
         }
 
         else if (mouseItem != null && mouseItem.NameItem == item.NameItem)
