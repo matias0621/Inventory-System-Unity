@@ -84,18 +84,14 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
 
         if (mouseItem == null && item != null && quantityItem > 1)
         {
-            Debug.Log("---------------------------Antes de la divicion----------------------");
-            Debug.Log(quantityItem);
-            Debug.Log("---------------------------Antes de la divicion----------------------");
-            quantityItem /= 2;
-            Debug.Log("---------------------------Despues de la divicion----------------------");
-            Debug.Log(quantityItem);
-            Debug.Log("---------------------------Despues de la divicion----------------------");
-            SetQuantity(quantityItem);
+            int amountToGive = quantityItem / 2;
+            int amountToKeep = quantityItem - amountToGive;
+            SetQuantity(amountToKeep);
+            quantityItem = amountToKeep;
             InventoryManager.Instance.SetDraggedItem(item.Clone(), quantityItem);
         }
 
-        if (mouseItem != null && mouseItem.NameItem == item.NameItem)
+        else if (mouseItem != null && mouseItem.NameItem == item.NameItem)
         {
             quantityItem += quantityItemMouse;
             if (quantityItem > 64)
@@ -129,6 +125,7 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
 
     public void SetQuantity(int quantity)
     {
+        quantityItem = quantity;
         quantityObject.text = quantity > 0 ? quantity.ToString() : "";
     }
 
