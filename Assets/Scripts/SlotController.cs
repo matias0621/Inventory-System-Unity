@@ -144,4 +144,9 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
     {
         return item;
     }
+
+    public float GetQuantity()
+    {
+        return quantityItem;
+    }
 }

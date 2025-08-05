@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -102,6 +101,22 @@ public class InventoryManager : MonoBehaviour
 
     public void FindSlotForSaveItem(Item item)
     {
+        bool found = false;
+        foreach (GameObject slot in SlotList)
+        {
+            SlotController slotController = slot.GetComponent<SlotController>();
+            Item itemFound = slotController.GetItem();
+            if (itemFound != null && itemFound.NameItem.Equals(item.NameItem) && 
+                slotController.GetQuantity() < 64)
+            {
+                slotController.IncreaseQuantity();
+                found = true;
+                break;
+            }
+        }
+        
+        if (found) return;
+        
         foreach (GameObject slot in SlotList)
         {
             SlotController slotController = slot.GetComponent<SlotController>();
