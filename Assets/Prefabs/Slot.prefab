@@ -229,6 +229,8 @@ MonoBehaviour:
   item: {fileID: 0}
   slot: {fileID: 7503121166969103697}
   quantityObject: {fileID: 2434384409317502488}
+  quantityItem: 0
+  itemCollectible: {fileID: 574937556120390472, guid: c603c4488432f6f47bb294f0c8bd071f, type: 3}
 --- !u!1 &7503121166969103697
 GameObject:
   m_ObjectHideFlags: 0

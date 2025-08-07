@@ -4,18 +4,32 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SlotController : MonoBehaviour, IPointerClickHandler
+public class SlotController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Item item;
     public GameObject slot;
     public TextMeshProUGUI quantityObject;
     [SerializeField] private int quantityItem;
+    private bool overMouse = false;
+    public GameObject itemCollectible;
     
     
 
     void Start()
     {
         SetDataSlot(item);
+    }
+
+    private void Update()
+    {
+        if (overMouse && Input.GetKeyDown(KeyCode.Q))
+        {
+            GameObject itemInGame = Instantiate(itemCollectible);
+            ItemCollectible itemCollectibleScript = itemInGame.transform.GetComponent<ItemCollectible>();
+            itemCollectibleScript.SetItem(item);
+            quantityItem--;
+            SetQuantity(quantityItem);
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -74,6 +88,16 @@ public class SlotController : MonoBehaviour, IPointerClickHandler
             SetQuantity(0);
             item = null;
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        overMouse = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        overMouse = false;
     }
 
 

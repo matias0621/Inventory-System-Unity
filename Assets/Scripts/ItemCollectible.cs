@@ -9,7 +9,7 @@ public class ItemCollectible : MonoBehaviour
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = item.Icon;
+        if (item != null) spriteRenderer.sprite = item.Icon;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -19,5 +19,12 @@ public class ItemCollectible : MonoBehaviour
             InventoryManager.Instance.FindSlotForSaveItem(item);
             Destroy(gameObject);
         }
+    }
+
+    public void SetItem(Item newItem)
+    {
+        item = newItem;
+        spriteRenderer.sprite = item.Icon;
+        
     }
 }
