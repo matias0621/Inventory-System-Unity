@@ -151,12 +151,14 @@ public class SlotController : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         quantityItem = quantity;
         quantityObject.text = quantity > 0 ? quantity.ToString() : "";
+        InventoryManager.Instance.SetWeight(quantityItem * item.weight);
     }
 
     public void IncreaseQuantity()
     {
         quantityItem++;
         quantityObject.text = quantityItem.ToString(); 
+        InventoryManager.Instance.SetWeight(quantityItem * item.weight);
     }
 
     public Boolean IsEmpty()

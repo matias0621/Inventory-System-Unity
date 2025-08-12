@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,9 @@ public class InventoryManager : MonoBehaviour
     public TextMeshProUGUI itemQuantity;
     public GameObject[] SlotList;
     public int quantityItem = 0;
+    public int actuallyWeight;
+    public int maxWeight;
+    public PlayerController player;
     
     private void Awake()
     {
@@ -128,4 +132,14 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+
+    public void SetWeight(int weight)
+    {
+        actuallyWeight = weight;
+        Debug.Log(actuallyWeight);
+        if (actuallyWeight > maxWeight) player.SetSpeed(2);
+        else if (actuallyWeight < maxWeight) player.SetSpeed(5);
+        
+    }
+    
 }
